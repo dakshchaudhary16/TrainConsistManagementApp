@@ -1,8 +1,8 @@
 /**
  * Train Consist Management App
  *
- * Version 19.0
- * UC19: Binary Search for Bogie ID
+ * Version 20.0
+ * UC20: Exception Handling During Search Operations (Fail-Fast)
  */
 
 import java.util.Arrays;
@@ -13,38 +13,38 @@ public class TrainConsist {
 
         System.out.println("=== Train Consist Management App ===");
 
-        // Unsorted bogie IDs
-        String[] bogieIds = {
-                "BG309",
-                "BG101",
-                "BG550",
-                "BG205",
-                "BG412"
-        };
+        // Case 1: Empty dataset (to test exception)
+        String[] bogieIds = {};
 
-        // Search key
-        String searchKey = "BG205"; // change to test
+        // Case 2: Uncomment to test valid scenario
+        // String[] bogieIds = {"BG101", "BG205", "BG309"};
 
-        // -------- SORT FIRST (IMPORTANT) --------
-        Arrays.sort(bogieIds);
+        String searchKey = "BG205";
 
-        System.out.println("\nSorted Bogie IDs:");
-        System.out.println(Arrays.toString(bogieIds));
+        try {
+            boolean found = searchBogie(bogieIds, searchKey);
 
-        System.out.println("\nSearching for: " + searchKey);
+            if (found) {
+                System.out.println("Bogie Found ✅");
+            } else {
+                System.out.println("Bogie Not Found ❌");
+            }
 
-        boolean found = binarySearch(bogieIds, searchKey);
-
-        // Result
-        if (found) {
-            System.out.println("Bogie Found ✅");
-        } else {
-            System.out.println("Bogie Not Found ❌");
+        } catch (IllegalStateException e) {
+            System.out.println("Error: " + e.getMessage());
         }
     }
 
-    // -------- BINARY SEARCH METHOD --------
-    public static boolean binarySearch(String[] arr, String key) {
+    // -------- SEARCH METHOD WITH VALIDATION --------
+    public static boolean searchBogie(String[] arr, String key) {
+
+        // FAIL-FAST CHECK
+        if (arr == null || arr.length == 0) {
+            throw new IllegalStateException("Cannot perform search: No bogies available in train");
+        }
+
+        // Optional: sort before binary search
+        Arrays.sort(arr);
 
         int low = 0;
         int high = arr.length - 1;
@@ -56,14 +56,14 @@ public class TrainConsist {
             int cmp = key.compareTo(arr[mid]);
 
             if (cmp == 0) {
-                return true; // found
+                return true;
             } else if (cmp < 0) {
-                high = mid - 1; // search left
+                high = mid - 1;
             } else {
-                low = mid + 1; // search right
+                low = mid + 1;
             }
         }
 
-        return false; // not found
+        return false;
     }
 }
