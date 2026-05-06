@@ -1,11 +1,9 @@
 /**
  * Train Consist Management App
  *
- * Version 17.0
- * UC17: Sort Bogie Names using Arrays.sort()
+ * Version 18.0
+ * UC18: Linear Search for Bogie ID
  */
-
-import java.util.Arrays;
 
 public class TrainConsist {
 
@@ -13,22 +11,36 @@ public class TrainConsist {
 
         System.out.println("=== Train Consist Management App ===");
 
-        // Array of bogie names
-        String[] bogieNames = {
-                "Sleeper",
-                "AC Chair",
-                "First Class",
-                "General",
-                "Luxury"
+        // Array of bogie IDs
+        String[] bogieIds = {
+                "BG101",
+                "BG205",
+                "BG309",
+                "BG412",
+                "BG550"
         };
 
-        System.out.println("\nBefore Sorting:");
-        System.out.println(Arrays.toString(bogieNames));
+        // Search key
+        String searchKey = "BG309"; // change to test
 
-        // -------- BUILT-IN SORT --------
-        Arrays.sort(bogieNames);
+        System.out.println("\nSearching for Bogie ID: " + searchKey);
 
-        System.out.println("\nAfter Sorting (Alphabetical):");
-        System.out.println(Arrays.toString(bogieNames));
+        boolean found = false;
+
+        // -------- LINEAR SEARCH --------
+        for (String id : bogieIds) {
+
+            if (id.equals(searchKey)) {
+                found = true;
+                break; // early termination
+            }
+        }
+
+        // Result
+        if (found) {
+            System.out.println("Bogie Found ✅");
+        } else {
+            System.out.println("Bogie Not Found ❌");
+        }
     }
 }
