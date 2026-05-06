@@ -1,9 +1,11 @@
 /**
  * Train Consist Management App
  *
- * Version 18.0
- * UC18: Linear Search for Bogie ID
+ * Version 19.0
+ * UC19: Binary Search for Bogie ID
  */
+
+import java.util.Arrays;
 
 public class TrainConsist {
 
@@ -11,30 +13,27 @@ public class TrainConsist {
 
         System.out.println("=== Train Consist Management App ===");
 
-        // Array of bogie IDs
+        // Unsorted bogie IDs
         String[] bogieIds = {
-                "BG101",
-                "BG205",
                 "BG309",
-                "BG412",
-                "BG550"
+                "BG101",
+                "BG550",
+                "BG205",
+                "BG412"
         };
 
         // Search key
-        String searchKey = "BG309"; // change to test
+        String searchKey = "BG205"; // change to test
 
-        System.out.println("\nSearching for Bogie ID: " + searchKey);
+        // -------- SORT FIRST (IMPORTANT) --------
+        Arrays.sort(bogieIds);
 
-        boolean found = false;
+        System.out.println("\nSorted Bogie IDs:");
+        System.out.println(Arrays.toString(bogieIds));
 
-        // -------- LINEAR SEARCH --------
-        for (String id : bogieIds) {
+        System.out.println("\nSearching for: " + searchKey);
 
-            if (id.equals(searchKey)) {
-                found = true;
-                break; // early termination
-            }
-        }
+        boolean found = binarySearch(bogieIds, searchKey);
 
         // Result
         if (found) {
@@ -42,5 +41,29 @@ public class TrainConsist {
         } else {
             System.out.println("Bogie Not Found ❌");
         }
+    }
+
+    // -------- BINARY SEARCH METHOD --------
+    public static boolean binarySearch(String[] arr, String key) {
+
+        int low = 0;
+        int high = arr.length - 1;
+
+        while (low <= high) {
+
+            int mid = (low + high) / 2;
+
+            int cmp = key.compareTo(arr[mid]);
+
+            if (cmp == 0) {
+                return true; // found
+            } else if (cmp < 0) {
+                high = mid - 1; // search left
+            } else {
+                low = mid + 1; // search right
+            }
+        }
+
+        return false; // not found
     }
 }
