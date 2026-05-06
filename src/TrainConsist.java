@@ -1,13 +1,12 @@
 /**
  * Train Consist Management App
  *
- * Version 7.0
- * UC7: Sort Bogies by Capacity using Comparator
+ * Version 9.0
+ * UC9: Group Bogies by Type using Stream API
  */
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 // --------------------- BOGIE CLASS ---------------------
 
@@ -20,13 +19,17 @@ class Bogie {
         this.capacity = capacity;
     }
 
+    public String getName() {
+        return name;
+    }
+
     @Override
     public String toString() {
-        return name + " (Capacity: " + capacity + ")";
+        return name + " (" + capacity + ")";
     }
 }
 
-// --------------------- MAIN CLASS ---------------------
+// --------------------- MAIN ---------------------
 
 public class TrainConsist {
 
@@ -37,22 +40,25 @@ public class TrainConsist {
         // Create list of bogies
         List<Bogie> bogies = new ArrayList<>();
 
-        // Add bogies
         bogies.add(new Bogie("Sleeper", 72));
         bogies.add(new Bogie("AC Chair", 56));
+        bogies.add(new Bogie("Sleeper", 72));
         bogies.add(new Bogie("First Class", 40));
+        bogies.add(new Bogie("AC Chair", 56));
 
-        System.out.println("\nBefore Sorting:");
-        for (Bogie b : bogies) {
-            System.out.println(b);
-        }
+        System.out.println("\nOriginal Bogie List:");
+        bogies.forEach(System.out::println);
 
-        // Sort using Comparator (by capacity)
-        bogies.sort(Comparator.comparingInt(b -> b.capacity));
+        // GROUPING USING STREAM API
+        Map<String, List<Bogie>> groupedBogies =
+                bogies.stream()
+                        .collect(Collectors.groupingBy(Bogie::getName));
 
-        System.out.println("\nAfter Sorting by Capacity (Ascending):");
-        for (Bogie b : bogies) {
-            System.out.println(b);
+        // Display grouped result
+        System.out.println("\nGrouped Bogies:");
+
+        for (Map.Entry<String, List<Bogie>> entry : groupedBogies.entrySet()) {
+            System.out.println(entry.getKey() + " -> " + entry.getValue());
         }
     }
 }
